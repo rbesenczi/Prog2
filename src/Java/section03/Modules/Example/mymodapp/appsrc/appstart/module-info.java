@@ -1,0 +1,3 @@
+module appstart {
+	requires appfuncs;
+}
