@@ -47,9 +47,9 @@ public class Observer extends Application {
         }
     }
 
-    private final String logFile = "/home/renato/work/Prog2/src/JavaFX/Experimenting/DIST_5k_60min.txt";
+    private final String logFile = "../../../../../porto_10_1000.txt";
     private final Map<Long, Loc> lmap = new HashMap<>();
-    private final String mapFile = "/home/renato/work/Prog2/src/JavaFX/Experimenting/lmap.txt";
+    private final String mapFile = "../../../../../porto_lmap.txt";
     private final Loc portoLocation = new Loc(41.1, -8.6);
 
     @Override
