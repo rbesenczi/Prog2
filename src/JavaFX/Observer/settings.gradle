@@ -1,0 +1,16 @@
+pluginManagement {
+    repositories {
+        maven {
+            url 'https://plugins.gradle.org/m2/'
+        }
+    }
+}
+
+rootProject.name = 'maps'
+
+include 'maps'
+include 'Observer'
+
+project(':maps').projectDir = file('maps')
+project(':Observer').projectDir = file('Observer')
+

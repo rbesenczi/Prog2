@@ -1,0 +1,22 @@
+plugins {
+    id 'application'
+    id 'com.gluonhq.gluonfx-gradle-plugin' version '1.0.3'
+}
+
+dependencies {
+    implementation project(':maps')
+}
+
+gluonfx {
+    target = 'host'
+    if (project.hasProperty('target')) {
+        target = project.getProperty('target')
+    }
+    attachConfig {
+        version = "$attachVersion"
+        services "lifecycle", "position", "storage"
+    }
+    resourcesList = [ "logging.properties" ]
+}
+
+mainClassName = "$moduleName/hu.unideb.oocwc.Observer"
