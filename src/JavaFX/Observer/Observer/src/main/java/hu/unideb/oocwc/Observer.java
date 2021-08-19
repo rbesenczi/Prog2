@@ -15,9 +15,9 @@ import javafx.scene.shape.Circle;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.LogManager;
@@ -51,6 +51,7 @@ public class Observer extends Application {
     private final Map<Long, Loc> lmap = new HashMap<>();
     private final String mapFile = "../../../../../porto_lmap.txt";
     private final Loc portoLocation = new Loc(41.1, -8.6);
+    private static boolean useSocket = false;
 
     @Override
     public void start(Stage stage) {
@@ -94,9 +95,28 @@ public class Observer extends Application {
 
                         Scanner scan = null;
                         try {
-                            scan = new Scanner(new File(logFile));
+                            if(useSocket)
+                            {
+                                Socket trafficSocket = new Socket("localhost", 10007);
+
+                                if (trafficSocket.isConnected())
+                                    LOGGER.log(Level.INFO, "Socket connected");
+
+                                OutputStream os = trafficSocket.getOutputStream();
+                                DataOutputStream dos = new DataOutputStream(os);
+                                dos.writeUTF("<disp>");
+
+                                scan = new Scanner(trafficSocket.getInputStream());
+                            }
+                            else {
+                                scan = new Scanner(new File(logFile));
+                            }
                         } catch (FileNotFoundException e) {
                             LOGGER.log(Level.SEVERE, "logfile open problem", e);
+                        } catch (UnknownHostException e) {
+                            LOGGER.log(Level.SEVERE, "socketproblem", e);
+                        } catch (IOException e) {
+                            e.printStackTrace();
                         }
 
                         int time = 0, minutes = 0, size = 0;
@@ -198,6 +218,14 @@ public class Observer extends Application {
     }
 
     public static void main(String[] args) {
+
+        for(String arg : args) {
+            if (arg.equals("socket")) {
+                useSocket = true;
+                break;
+            }
+        }
+
         Application.launch(args);
     }
 }
